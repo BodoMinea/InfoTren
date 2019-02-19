@@ -1,0 +1,24 @@
+{
+  "name": "com.cloudpis.tfc",
+  "version": "1.0.0",
+  "displayName": "TFC Informare",
+  "cordova": {
+    "platforms": [
+      "android"
+    ],
+    "plugins": {
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-background-mode": {},
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-qrscanner": {},
+      "cordova-plugin-vibration": {}
+    }
+  },
+  "dependencies": {
+    "cordova-android": "~7.0.0",
+    "cordova-plugin-background-mode": "git+https://github.com/tushe/cordova-plugin-background-mode.git",
+    "cordova-plugin-inappbrowser": "file:../../cordova-plugin-inappbrowser",
+    "cordova-plugin-qrscanner": "^2.6.0",
+    "cordova-plugin-statusbar": "^2.4.2"
+  }
+}

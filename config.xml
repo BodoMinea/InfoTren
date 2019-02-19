@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.flashits.trainradar" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>Info Tren</name>
+    <description>
+        Informatii in timp real din circulatia trenurilor de calatori din Romania.
+    </description>
+    <author email="bodo@flashweb.ro" href="https://flashweb.ro/bodo">
+        Bodo Minea
+    </author>
+    <content src="index.html" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="android-minSdkVersion" value="16" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#ee6e73" />
+    <preference name="StatusBarStyle" value="blacktranslucent" />
+    <plugin name="cordova-plugin-dialogs" source="npm" spec="~1.3.3" />
+    <plugin name="cordova-plugin-network-information" source="npm" spec="~1.3.3" />
+    <platform name="android">
+        <icon density="ldpi" src="www/assets/tis.png" />
+    </platform>
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+    <plugin name="cordova-plugin-geolocation" spec="~2.4.3" />
+    <plugin name="cordova-plugin-whitelist" spec="~1.3.3" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
+    <plugin name="cordova-plugin-background-mode" spec="https://github.com/tushe/cordova-plugin-background-mode.git" />
+    <plugin name="cordova-plugin-inappbrowser" spec="C:\Users\Bodo Minea\Desktop\cordova-plugin-inappbrowser" />
+    <plugin name="cordova-plugin-qrscanner" spec="^2.6.0" />
+    <plugin name="cordova-plugin-vibration" spec="~2.1.6" />
+    <engine name="android" spec="~7.0.0" />
+</widget>

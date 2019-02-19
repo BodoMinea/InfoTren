@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Global Site Tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-134496176-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-134496176-1');
+  </script>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css" />
+    <script type="text/javascript" src="assets/js/jquery.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/js/angular.min.js"></script>
+    <script type="text/javascript" src="assets/js/table.js"></script>
+    <link rel="stylesheet" href="assets/css/leaflet.css"/>
+    <title>Train Info</title>
+    <style type="text/css">
+   	.loader {
+  border: 6px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 6px solid #3498db;
+  border-bottom: 6px solid #3498db;
+  width: 14px;
+  height: 14px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+body,html {margin:0;width: 100% !important;height: 100% !important;}
+
+.icon-bar {
+  width: 100%;
+  background-color: #0d87ab;
+  overflow: auto;
+  position: fixed;
+  bottom: 0;
+}
+
+.icon-bar a {
+  float: left;
+  width: 20%;
+  text-align: center;
+  padding: 12px 0;
+  transition: all 0.3s ease;
+  color: white;
+  font-size: 36px;
+}
+
+.active {
+  background-color: #4CAF50;
+}
+
+.xdanger {
+  background-color: #ea7812;
+}
+</style>
+    </style>
+
+</head>
+
+<body ng-app="display" ng-controller="StopDisplay" id="gett" style="background-image: url(assets/bg.jpg);
+    background-size: cover;
+    background-attachment: fixed;"><br>
+<div class="container">
+<center>
+<form class="form-inline">
+  <div class="form-group">
+  <div class="input-group" style="height: 3em;">
+  <span class="input-group-addon">{{details.type || 'Rang'}}</span>
+  <input type="text" class="form-control" id="nr" placeholder="Introduceți nr tren" style="height: inherit;">
+  <div class="input-group-btn" style="height: inherit;">
+    <button style="height: inherit;" type="submit" class="btn btn-default" onclick="train(document.getElementById('nr').value,true)"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+	</button>
+	<button style="height: inherit;" type="submit" class="btn btn-warning" onclick="scan();"><i class="fa fa-qrcode" aria-hidden="true"></i>
+	</button>
+    <button style="height: inherit;" type="submit" class="btn btn-info" onclick="add(document.getElementById('nr').value)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+	</button>
+  </div>
+</div>
+  </div>
+</form></center>
+
+<div class="row">
+  <div class="col-md-6 col-xs-6">
+  <div class="panel panel-info">
+  <div class="panel-heading">Informații Tren <span class="pull-right"><img src="assets/ajax-loader.gif" style="display: none;" id="loading"></span></div>
+  <div class="panel-body panel-transparent">
+    <table class="table">
+    			<tr>
+    				<td><i class="glyphicon glyphicon-globe"></i> Ruta</td>
+    				<td>{{details.route}}</td>
+    			</tr>
+			</table>
+  </div>
+</div>
+<div class="panel panel-warning">
+  <div class="panel-heading">Întârziere</div>
+  <div class="panel-body">
+    <center><div id="delaygauge" style="width:70%;"></div></center>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">Parcurs
+  <div class="btn-group pull-right" style="margin-top: -5px;">
+        <button data-toggle="modal" data-target="#mapModal" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-map-marker"></span></button>
+    </div></div>
+  <div class="panel-body" style="overflow: scroll;">
+    <table class="table table-hover">
+    <tr>	
+    	<td><b>Km</b></td>
+    	<td><b>Stație</b></td>
+    	<td><b>Sos.</b></td>
+    	<td><span class="glyphicon glyphicon-hourglass"></span></td>
+    	<td><b>Plc.</b></td>
+    	<td><b><span class="glyphicon glyphicon-time"></span></b></td>
+    	<td><b>Obs.</b></td>
+    </tr>
+    	<tr ng-repeat="station in stations track by $index">
+    			<td>{{station.km}}</td>	
+    			<td><span ng-if="station.type=='Real'" class="glyphicon glyphicon-signal"></span> {{station.name}}</td>	
+    			<td>{{station.arr}}</td>	
+    			<td>{{station.dwell}}</td>	
+    			<td>{{station.dep}}</td>	
+    			<td>{{station.delay}}</td>	
+    			<td>{{station.note}}</td>	
+    	</tr>
+    </table>
+
+  </div>
+</div>
+  </div>
+  <div class="col-md-6 col-xs-6">
+  	<img src="https://static.flash-its.eu/infotren/logo.php" style="width: 100%; height: auto; margin-left: auto; margin-right: auto; margin-bottom: 1em;" id="oplog">
+<div class="panel panel-default">
+  <div class="panel-heading">Informații Călătorie</div>
+  <div class="panel-body">
+    <table class="table">
+    			<tr>
+    				<td><i class="glyphicon glyphicon-ok"></i> Status</td>
+    				<td>{{details.state}}</td>
+    			</tr>
+    			<tr>
+    				<td><i class="glyphicon glyphicon-refresh"></i> Ultima Informație</td>
+    				<td>{{details.info}}</td>
+    			</tr>
+    			<center><small>{{details.time}}</small></center>
+    			<tr>
+    				<td><i class="glyphicon glyphicon-flag"></i> Destinație</td>
+    				<td>{{details.destination}}</td>
+    			</tr>
+    			<tr>
+    				<td><i class="glyphicon glyphicon-time"></i> Sosire</td>
+    				<td>{{details.desttime}}</td>
+    			</tr>
+    			<tr>
+    				<td><i class="glyphicon glyphicon-transfer"></i> Distanța Totală</td>
+    				<td>{{details.distance}}</td>
+    			</tr>
+    			<tr>
+    				<td><i class="glyphicon glyphicon-hourglass"></i> Durata</td>
+    				<td>{{details.triptime}}</td>
+    			</tr>
+			</table>
+  </div>
+</div>
+<div class="panel panel-danger">
+  <div class="panel-heading">Următoarea Oprire</div>
+  <div class="panel-body">
+  <center>
+    <h2><i class="glyphicon glyphicon-map-marker"></i> {{details.nextstop}}</h2>
+    <i><i class="glyphicon glyphicon-chevron-right"></i> {{details.nexttime}}</i>
+   </center>
+  </div>
+</div>
+  </div>
+</div>
+
+</div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script src="assets/js/raphael.min.js"></script>
+    <script src="assets/js/justgage.js"></script>
+    <script src="assets/js/leaflet.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+
+    <div class="modal fade" id="gpsModal" tabindex="-1" role="dialog" aria-labelledby="gpsModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" onclick="hidem();"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gpsModalLabel"><span class="glyphicon glyphicon-dashboard"></span> Informații GPS</h4>
+      </div>
+      <div class="modal-body">
+        <center>
+        	<div id="speedgauge" style="width:70%;"></div>
+        	<div class="alert alert-info" role="alert">Viteza afișată este determinată folosind receptorul GPS al telefonului pe care rulează aplicația, așa că nu este efectiv viteza trenului urmărit, ci viteza cu care vă deplasați dumneavoastră în momentul în care folosiți aplicația.</div>
+        </center>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" onclick="hidem();">Închide</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="favModal" tabindex="-1" role="dialog" aria-labelledby="favModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" onclick="hidef();"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="favModalLabel"><span class="glyphicon glyphicon-star"></span> Trenuri Favorite</h4>
+      </div>
+      <div class="modal-body">
+        <div id="todos"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" onclick="hidef();">Închide</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="fullModal" tabindex="-1" role="dialog" aria-labelledby="fullModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="fullModalLabel"><span class="glyphicon glyphicon-list"></span> Parcurs</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-hover">
+    <tr>	
+    	<td><b>Km</b></td>
+    	<td><b>Stație</b></td>
+    	<td><b>Sos.</b></td>
+    	<td><span class="glyphicon glyphicon-hourglass"></span></td>
+    	<td><b>Plc.</b></td>
+    	<td><b><span class="glyphicon glyphicon-time"></span></b></td>
+    	<td><b>Obs.</b></td>
+    </tr>
+    	<tr ng-repeat="station in stations track by $index">
+    			<td>{{station.km}}</td>	
+    			<td><span ng-if="station.type=='Real'" class="glyphicon glyphicon-signal"></span> {{station.name}}</td>	
+    			<td>{{station.arr}}</td>	
+    			<td>{{station.dwell}}</td>	
+    			<td>{{station.dep}}</td>	
+    			<td>{{station.delay}}</td>	
+    			<td>{{station.note}}</td>	
+    	</tr>
+    </table>
+    <div class="alert alert-info" role="alert"><b>Informații</b> Stațiile cu iconița „semnal” (<span class="glyphicon glyphicon-signal"></span>) au în tabel ora reală a sosirii/plecării/trecerii trenului și a întârzierii, cele care nu au reprezintă stațiile următoare sau stațiile prin care trenul a trecut dar nu sunt echipate cu raportare electronică, iar orele afișate sunt estimări calculate de sistem.</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal" aria-label="Close">Închide</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="mapModalLabel"><span class="glyphicon glyphicon-picture"></span> Harta Traseu</h4>
+      </div>
+      <div class="modal-body">
+        <div id="mapid" style="height: 300px"></div><br>
+        <div class="alert alert-info" role="alert">Marcatorii albaștrii sunt stațiile din parcurs, iar cel portocaliu reprezintă ultima poziție raportată a trenului. Harta este prezentată cu caracter orientativ și s-ar putea ca unele stații din parcurs să nu fie figurate exact la poziția lor din teren. Orele afișate țin cont de întârzierea raportată și sunt exact cele originale, dar reprezentarea pe hartă este cea a stației cu numele cel mai apropiat din fișierul cu declarația rețelei, așa că dacă un punct nu se aliniază cu traseul, probabil este o eroare.</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal" aria-label="Close">Închide</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="firstModal" tabindex="-1" role="dialog" aria-labelledby="firstModalLabel" style="z-index: 9999999999999999999;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="firstModalLabel">Îți mulțumim pentru că ai instalat aplicația Info Tren!</h4>
+      </div>
+      <div class="modal-body">
+        <p>Aplicația Info Tren te ajută să obții informații în timp real despre traficul feroviar de pasageri din România (întârzierea curentă a unui tren, lista cu stații și următoarea oprire a unui anumit tren), urmărind să fie utilă atât călătorilor frecvenți cât și celor ocazionali. Datele prezentate în această aplicație reprezintă o formă transformată pentru navigare și înțelegere mai ușoară a actualizărilor transmise de CFR S.A. pe propriul site web, pe care <a href="https://appiris.infofer.ro/myTrainRo.aspx">îl puteți accesa și în mod direct</a>. Totuși, utilizând aplicația Info Tren beneficiați de posibilități extinse: <b>vizualizarea progresului unei curse pe hartă sau în mai multe casete structurate, urmărirea progresului printr-o notificare persistentă, reîncărcarea automată a datelor, salvarea anumitor trenuri ca favorite pentru accesare ulterioară mai ușoară.</b><br><br>Această aplicație accesează paginile de informare puse la dispoziție de CFR S.A. exact ca un utilizator normal direct pe site, fără a pune în pericol oprerarea normală a sistemelor acestora și fără a genera un volum anormal de trafic.<br><br>Aplicația Info Tren, poate colecta cu scopuri statistice informații ce nu vă pot identifica personal prin servicii proprii și terțe de evaluare a audienței.<br><br>Aplicația Info Tren poate afișa mesaje promoționale sau cu caracter general-informațional fără restrângerea audienței (ex.: către toți utilizatorii) ocazionale, doar dacă sunt plasate în mod direct și explicit de creatorii acesteia, doar la deschiderea aplicației. (ex.: fără rețele publice de reclame care colectează date, fără popup-uri sau adware adăugat pe telefonul dumneavoastră). <br><br>Creatorii aplicației Info Tren nu sunt responsabili pentru acuratețea datelor prezentate și nu pot fi făcuți responsabili de eventuale pagube sau neplăceri cauzate în mod direct sau indirect de acestea. CFR S.A., entitate neafiliată, în calitate de administrator al serviciului online IRIS (Integrated Railway Information System) este absolvită sub aceiași termeni, dacă nu se specifică altfel. </p>
+      </div>
+      <div class="modal-footer"><center>
+        <button type="button" class="btn btn-success" onclick="$('#firstModal').modal('hide');localStorage.setItem('accepted',true);">Acceptă și continuă</button></center>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="launchModal" tabindex="-1" role="dialog" aria-labelledby="launchModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="launchModalLabel"></h4>
+      </div>
+      <div class="modal-body" id="launchpromo">
+        
+      </div>
+      <div class="modal-footer"><center>
+        <button type="button" class="btn btn-success" onclick="$('#launchModal').modal('hide');localStorage.setItem('announcements',pendingupdancint);">Continuă către aplicație</button></center>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="icon-bar">
+  <a href="javascript:$('#fullModal').modal('show');"><i class="glyphicon glyphicon-list"></i></a> 
+  <a href="javascript:showm();"><i class="glyphicon glyphicon-dashboard"></i></a> 
+  <a class="active" href="javascript:train(document.getElementById('nr').value,true)"><i class="fa fa-train"></i></a> 
+  <a href="javascript:showf();"><i class="glyphicon glyphicon-star-empty"></i></a>
+  <a href="javascript:refreshs()" id="ref"><i class="glyphicon glyphicon-refresh"></i></a> 
+</div>
+
+
+</body>
+</html>
