@@ -1,3 +1,20 @@
+var allsta;
+
+function closest(la,lo){
+  if(la==0||lo==0) return {"sta":undefined,"dist":undefined};
+  var mindif = 99999;
+  var closest;
+  for (index = 0; index < allsta.features.length; ++index) {
+    var dif = PythagorasEquirectangular(la,lo, allsta.features[index].geometry.coordinates[1], allsta.features[index].geometry.coordinates[0]);
+
+    if (dif < mindif) {
+      closest = index;
+      mindif = dif;
+    }
+  }
+  return allsta.features[closest].properties.name;
+}
+
 function fuzzySearch(t, p) {
   var a = [],
       b = [],
@@ -249,7 +266,11 @@ function refreshs(){
 
 interval(function(){
     if(refreshing) { train(lasttrain); }
-},180000);
+    if(localStorage.getItem('accepted')!=null){
+    navigator.geolocation.getCurrentPosition(function(posi){
+        $("#clsta").text(closest(posi.coords.latitude,posi.coords.longitude));
+    }); }
+},60000);
 
 jQuery(document).ready(function($){
     scope = angular.element($("#gett")).scope();
@@ -259,6 +280,22 @@ jQuery(document).ready(function($){
 var staIcon = L.icon({iconUrl: 'assets/sta.png',iconAnchor: [0, 16]});
 
 var trIcon = L.icon({iconUrl: 'assets/tr.png',iconAnchor: [0, 16]});
+
+function PythagorasEquirectangular(lat1, lon1, lat2, lon2) { // distanta
+  lat1 = Deg2Rad(lat1);
+  lat2 = Deg2Rad(lat2);
+  lon1 = Deg2Rad(lon1);
+  lon2 = Deg2Rad(lon2);
+  var R = 6371; // km
+  var x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2);
+  var y = (lat2 - lat1);
+  var d = Math.sqrt(x * x + y * y) * R;
+  return d;
+}
+
+function Deg2Rad(deg) {
+  return deg * Math.PI / 180;
+}
 
 function mapupd(){
 	markersLayer.clearLayers();
@@ -293,6 +330,12 @@ function checkConnection() {
 
 var pendingupdancint,scanning=false;
 
+function d(){
+    navigator.geolocation.getCurrentPosition(function(posi){
+        $("#clsta").text(closest(posi.coords.latitude,posi.coords.longitude));
+    });
+}
+
 var app = {
     initialize: function() {
         this.bindEvents();
@@ -312,7 +355,8 @@ var app = {
         title: 'Info Tren LIVE!'
     })
     rail = [];
-    jQuery.getJSON("cfr.json", function(data){         
+    jQuery.getJSON("cfr.json", function(data){
+            allsta=data;
     		for (var i = 0; i < data.features.length; i++) {
     			rail.push({ "id": data.features[i].properties.station_id ,"pos":data.features[i].geometry.coordinates,"name": data.features[i].properties.name });
 			}
@@ -332,6 +376,9 @@ var app = {
 				$("#nr").popover('show');
 			});
     	}else{
+            navigator.geolocation.getCurrentPosition(function(posi){
+                $("#clsta").text(closest(posi.coords.latitude,posi.coords.longitude));
+            });
     		jQuery.getJSON("REMOVED_ON_PUBLISH", function(data){
     			if(data.cnt>parseInt(localStorage.getItem('announcements'))){
     				$('#launchpromo').html(data.cont);

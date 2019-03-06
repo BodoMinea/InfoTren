@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.flashits.trainradar" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget android-versionCode="10001" id="com.flashits.trainradar" version="1.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Info Tren</name>
     <description>
         Informatii in timp real din circulatia trenurilor de calatori din Romania.
@@ -39,5 +39,6 @@
     <plugin name="cordova-plugin-inappbrowser" spec="C:\Users\Bodo Minea\Desktop\cordova-plugin-inappbrowser" />
     <plugin name="cordova-plugin-qrscanner" spec="^2.6.0" />
     <plugin name="cordova-plugin-vibration" spec="~2.1.6" />
-    <engine name="android" spec="~7.0.0" />
+    <plugin name="cordova-plugin-firebase" spec="^2.0.5" />
+    <engine name="android" spec="^7.0.0" />
 </widget>

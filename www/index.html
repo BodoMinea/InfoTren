@@ -182,12 +182,16 @@ body,html {margin:0;width: 100% !important;height: 100% !important;}
     <h2><i class="glyphicon glyphicon-map-marker"></i> {{details.nextstop}}</h2>
     <i><i class="glyphicon glyphicon-chevron-right"></i> {{details.nexttime}}</i>
    </center>
+   <hr>
+   <h5>Cea mai apropiată stație (GPS)</h5>
+   <i class="fa fa-compass" aria-hidden="true"></i> <span id="clsta"></span>
   </div>
 </div>
   </div>
 </div>
 
 </div>
+	<br><br><br>
     <script type="text/javascript" src="cordova.js"></script>
     <script src="assets/js/raphael.min.js"></script>
     <script src="assets/js/justgage.js"></script>
@@ -292,10 +296,10 @@ body,html {margin:0;width: 100% !important;height: 100% !important;}
         <h4 class="modal-title" id="firstModalLabel">Îți mulțumim pentru că ai instalat aplicația Info Tren!</h4>
       </div>
       <div class="modal-body">
-        <p>Aplicația Info Tren te ajută să obții informații în timp real despre traficul feroviar de pasageri din România (întârzierea curentă a unui tren, lista cu stații și următoarea oprire a unui anumit tren), urmărind să fie utilă atât călătorilor frecvenți cât și celor ocazionali. Datele prezentate în această aplicație reprezintă o formă transformată pentru navigare și înțelegere mai ușoară a actualizărilor transmise de CFR S.A. pe propriul site web, pe care <a href="https://appiris.infofer.ro/myTrainRo.aspx">îl puteți accesa și în mod direct</a>. Totuși, utilizând aplicația Info Tren beneficiați de posibilități extinse: <b>vizualizarea progresului unei curse pe hartă sau în mai multe casete structurate, urmărirea progresului printr-o notificare persistentă, reîncărcarea automată a datelor, salvarea anumitor trenuri ca favorite pentru accesare ulterioară mai ușoară.</b><br><br>Această aplicație accesează paginile de informare puse la dispoziție de CFR S.A. exact ca un utilizator normal direct pe site, fără a pune în pericol oprerarea normală a sistemelor acestora și fără a genera un volum anormal de trafic.<br><br>Aplicația Info Tren, poate colecta cu scopuri statistice informații ce nu vă pot identifica personal prin servicii proprii și terțe de evaluare a audienței.<br><br>Aplicația Info Tren poate afișa mesaje promoționale sau cu caracter general-informațional fără restrângerea audienței (ex.: către toți utilizatorii) ocazionale, doar dacă sunt plasate în mod direct și explicit de creatorii acesteia, doar la deschiderea aplicației. (ex.: fără rețele publice de reclame care colectează date, fără popup-uri sau adware adăugat pe telefonul dumneavoastră). <br><br>Creatorii aplicației Info Tren nu sunt responsabili pentru acuratețea datelor prezentate și nu pot fi făcuți responsabili de eventuale pagube sau neplăceri cauzate în mod direct sau indirect de acestea. CFR S.A., entitate neafiliată, în calitate de administrator al serviciului online IRIS (Integrated Railway Information System) este absolvită sub aceiași termeni, dacă nu se specifică altfel. </p>
+        <p>Aplicația Info Tren te ajută să obții informații în timp real despre traficul feroviar de pasageri din România (întârzierea curentă a unui tren, lista cu stații și următoarea oprire a unui anumit tren), urmărind să fie utilă atât călătorilor frecvenți cât și celor ocazionali. Datele prezentate în această aplicație reprezintă o formă transformată pentru navigare și înțelegere mai ușoară a actualizărilor transmise de CFR S.A. pe propriul site web, pe care <a href="https://appiris.infofer.ro/myTrainRo.aspx">îl puteți accesa și în mod direct</a>. Totuși, utilizând aplicația Info Tren beneficiați de posibilități extinse: <b>vizualizarea progresului unei curse pe hartă sau în mai multe casete structurate, urmărirea progresului printr-o notificare persistentă, reîncărcarea automată a datelor, salvarea anumitor trenuri ca favorite pentru accesare ulterioară mai ușoară.</b><br><br>Această aplicație accesează paginile de informare puse la dispoziție de CFR S.A. exact ca un utilizator normal direct pe site, fără a pune în pericol oprerarea normală a sistemelor acestora și fără a genera un volum anormal de trafic.<br><br>Aplicația Info Tren, poate colecta cu scopuri statistice informații ce nu vă pot identifica personal prin servicii proprii și terțe de evaluare a audienței.<br><br>Aplicația Info Tren poate afișa mesaje promoționale sau cu caracter general-informațional fără restrângerea audienței (ex.: către toți utilizatorii) ocazionale, doar dacă sunt plasate în mod direct și explicit de creatorii acesteia, doar la deschiderea aplicației sau prin notificări, conform unei politici de utilizare acceptabilă din partea dezvoltatorului. (ex.: fără rețele publice de reclame care colectează date, fără popup-uri sau adware adăugat pe telefonul dumneavoastră - notificările fără caracter de interes general în domeniul traficului feroviar vor avea o frecvență mai mică de una pe săptămână). <br><br>Creatorii aplicației Info Tren nu sunt responsabili pentru acuratețea datelor prezentate și nu pot fi făcuți responsabili de eventuale pagube sau neplăceri cauzate în mod direct sau indirect de acestea. CFR S.A., entitate neafiliată, în calitate de administrator al serviciului online IRIS (Integrated Railway Information System) este absolvită sub aceiași termeni, dacă nu se specifică altfel.<br><br>Locația dumneavoastră, determinată prin GPS-ul dispozitivului, este folosită strict pentru determinarea vitezei și a stației cele mai apropiate (în regim local, fără a transmite nicăieri aceste coordonate). </p>
       </div>
       <div class="modal-footer"><center>
-        <button type="button" class="btn btn-success" onclick="$('#firstModal').modal('hide');localStorage.setItem('accepted',true);">Acceptă și continuă</button></center>
+        <button type="button" class="btn btn-success" onclick="$('#firstModal').modal('hide');localStorage.setItem('accepted',true);d();">Acceptă și continuă</button></center>
       </div>
     </div>
   </div>
