@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="10001" id="com.flashits.trainradar" version="1.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget android-versionCode="10002" id="com.flashits.trainradar" version="1.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Info Tren</name>
     <description>
         Informatii in timp real din circulatia trenurilor de calatori din Romania.
@@ -10,6 +10,7 @@
     <content src="index.html" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="16" />
+    <preference name="android-targetSdkVersion" value="28" />
     <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarBackgroundColor" value="#ee6e73" />
     <preference name="StatusBarStyle" value="blacktranslucent" />
@@ -39,6 +40,6 @@
     <plugin name="cordova-plugin-inappbrowser" spec="C:\Users\Bodo Minea\Desktop\cordova-plugin-inappbrowser" />
     <plugin name="cordova-plugin-qrscanner" spec="^2.6.0" />
     <plugin name="cordova-plugin-vibration" spec="~2.1.6" />
-    <plugin name="cordova-plugin-firebase" spec="^2.0.5" />
+    <plugin name="cordova-plugin-firebasex" spec="^7.0.1" />
     <engine name="android" spec="^7.0.0" />
 </widget>
